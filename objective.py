@@ -9,6 +9,7 @@ with safe_import_context() as import_ctx:
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import balanced_accuracy_score as BAS
     from sklearn.metrics import roc_auc_score as RAS
+    from sklearn.preprocessing import LabelEncoder
 
 
 # The benchmark objective must be named `Objective` and
@@ -59,6 +60,13 @@ class Objective(BaseObjective):
         self.X_test, self.y_test = X_test, y_test
         self.categorical_indicator = categorical_indicator
 
+        le = LabelEncoder()
+        self.y_train = le.fit_transform(self.y_train)
+        self.y_val = le.transform(self.y_val)
+        self.y_test = le.transform(self.y_test)
+
+        self.n_classes = len(np.unique(y))
+
     def evaluate_result(self, model):
         # The arguments of this function are the outputs of the
         # `Solver.get_result`. This defines the benchmark's API to pass
@@ -100,5 +108,6 @@ class Objective(BaseObjective):
             y_train=self.y_train,
             X_val=self.X_val,
             y_val=self.y_val,
-            categorical_indicator=self.categorical_indicator
+            categorical_indicator=self.categorical_indicator,
+            n_classes=self.n_classes
         )

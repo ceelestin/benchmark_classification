@@ -30,7 +30,7 @@ class OSolver(BaseSolver):
 
     def set_objective(
             self, X_train, y_train, X_val, y_val,
-            categorical_indicator
+            categorical_indicator, n_classes,
     ):
         # Define the information received by each solver from the objective.
         # The arguments of this function are the results of the
@@ -40,9 +40,9 @@ class OSolver(BaseSolver):
         self.X_train, self.y_train = X_train, y_train
         self.X_val, self.y_val = X_val, y_val
         self.cat_ind = categorical_indicator
+        self.n_classes = n_classes
         
         self.model = self.get_model() #Includes preprocessor
-        
 
     def objective(self, trial):
         param = self.sample_parameters(trial)
@@ -50,9 +50,13 @@ class OSolver(BaseSolver):
         params.update({
             f"model__{p}": v for p, v in param.items()
         })
+        import ipdb; ipdb.set_trace()
         model = clone(self.model).set_params(**params)
+        import ipdb; ipdb.set_trace()
         res = model.fit(self.X_train, self.y_train)
+        import ipdb; ipdb.set_trace()
         trial.set_user_attr('model', res)
+        import ipdb; ipdb.set_trace()
         return res.score(self.X_val, self.y_val)
 
     def run(self, callback):
