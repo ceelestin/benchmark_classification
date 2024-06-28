@@ -1,12 +1,12 @@
 from benchopt import BaseSolver, safe_import_context
 
 with safe_import_context() as import_ctx:
-    from sklearn.pipeline import Pipeline
-    from sklearn.compose import ColumnTransformer
-    from sklearn.preprocessing import OrdinalEncoder
-    from sklearn.model_selection import train_test_split
-    from tabpfn import TabPFNClassifier
     import torch
+    from sklearn.compose import ColumnTransformer
+    from sklearn.model_selection import train_test_split
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OrdinalEncoder
+    from tabpfn import TabPFNClassifier
 
 
 # Protect the import with `safe_import_context()`. This allows:

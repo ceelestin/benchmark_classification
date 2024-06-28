@@ -1,4 +1,5 @@
 from benchopt import safe_import_context
+
 from benchmark_utils.optuna_solver import OSolver
 
 with safe_import_context() as import_ctx:

@@ -6,9 +6,9 @@ from benchopt import BaseObjective, safe_import_context
 with safe_import_context() as import_ctx:
     import numpy as np
     from sklearn.dummy import DummyClassifier
-    from sklearn.model_selection import train_test_split
     from sklearn.metrics import balanced_accuracy_score as BAS
     from sklearn.metrics import roc_auc_score as RAS
+    from sklearn.model_selection import train_test_split
 
 
 # The benchmark objective must be named `Objective` and

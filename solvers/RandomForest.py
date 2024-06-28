@@ -1,12 +1,13 @@
 from benchopt import safe_import_context
+
 from benchmark_utils.optuna_solver import OSolver
 
 with safe_import_context() as import_ctx:
     import optuna  # noqa: F401
-    from sklearn.pipeline import Pipeline
     from sklearn.compose import ColumnTransformer
-    from sklearn.preprocessing import OneHotEncoder as OHE
     from sklearn.ensemble import RandomForestClassifier
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder as OHE
 
 
 class Solver(OSolver):

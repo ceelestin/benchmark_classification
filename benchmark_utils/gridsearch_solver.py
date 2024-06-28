@@ -5,9 +5,9 @@ from benchopt.stopping_criterion import SingleRunCriterion
 # - skipping import to speed up autocompletion in CLI.
 # - getting requirements info when all dependencies are not installed.
 with safe_import_context() as import_ctx:
+    from sklearn.compose import ColumnTransformer
     from sklearn.model_selection import GridSearchCV
     from sklearn.pipeline import Pipeline
-    from sklearn.compose import ColumnTransformer
     from sklearn.preprocessing import OneHotEncoder as OHE
 
 

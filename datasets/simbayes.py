@@ -5,28 +5,21 @@ from benchopt import BaseDataset, safe_import_context
 # - getting requirements info when all dependencies are not installed.
 with safe_import_context() as import_ctx:
     import numpy as np
-    from benchopt.datasets import make_correlated_data
 
 
 # All datasets must be named `Dataset` and inherit from `BaseDataset`
 class Dataset(BaseDataset):
 
     # Name to select the dataset in the CLI and to display the results.
-    name = "Simulated"
+    name = "simbayes"
 
     # List of parameters to generate the datasets. The benchmark will consider
     # the cross product for each key in the dictionary.
     # Any parameters 'param' defined here is available as `self.param`.
     parameters = {
         'n_samples, n_features': [
-            (1000, 500),
-            (5000, 200),
+            (100, 5),
         ],
-        'seed': [27]
-    }
-
-    test_parameters = {
-        'n_samples, n_features': [(100, 5)]
     }
 
     def get_data(self):
@@ -35,11 +28,11 @@ class Dataset(BaseDataset):
         # API to pass data. It is customizable for each benchmark.
 
         # Generate pseudorandom data using `numpy`.
-        rng = np.random.RandomState(self.seed)
-        X, y, _ = make_correlated_data(
-            self.n_samples, self.n_features, random_state=rng
-        )
-        y = y > 0
+        rng = np.random.RandomState(42)  # same seed as in BayesEstimator utils
+        beta = rng.randn(self.n_features)
+        X = rng.randn(self.n_samples, self.n_features)
+        s = X @ beta
+        y = 2 * (s > 0).astype(int) - 1
 
         cat_indicator = [False]*X.shape[1]
 

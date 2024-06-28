@@ -1,4 +1,5 @@
 from benchopt import safe_import_context
+
 from benchmark_utils.optuna_solver import OSolver
 
 # Protect the import with `safe_import_context()`. This allows:
@@ -6,10 +7,10 @@ from benchmark_utils.optuna_solver import OSolver
 # - getting requirements info when all dependencies are not installed.
 with safe_import_context() as import_ctx:
     import optuna  # noqa: F401
-    from sklearn.pipeline import Pipeline
     from sklearn.compose import ColumnTransformer
-    from sklearn.preprocessing import OneHotEncoder as OHE
     from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder as OHE
 
 
 # The benchmark solvers must be named `Solver` and
