@@ -11,10 +11,16 @@ with safe_import_context() as import_ctx:
 # inherit from `BaseSolver` for `benchopt` to work properly.
 class BayesEstimator(BaseSolver):
     def __init__(self, noise):
-        rng = np.random.RandomState(42)  # same seed as in dataset simbayes.py
-        self.model = lambda X: 2 * (
-            X @ rng.randn(X.shape[1]) + noise * rng.randn(X.shape[0]) > 0
-            ).astype(int) - 1
+        # The following seed must be the same as in the dataset simbayes.py
+        self.rng = np.random.RandomState(42)
+        self.beta = None  # Placeholder for beta
+        self.model = lambda X: self._model_helper(X, noise)
+
+    def _model_helper(self, X, noise):
+        if self.beta is None:
+            self.beta = self.rng.randn(X.shape[1])
+        return 2 * (X @ self.beta + noise * self.rng.randn(X.shape[0]) > 0
+                    ).astype(int) - 1
 
     def fit(self, X, y):
         pass
