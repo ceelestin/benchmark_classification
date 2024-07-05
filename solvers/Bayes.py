@@ -21,7 +21,7 @@ class Solver(BayesEstimator):
     # the cross product for each key in the dictionary.
     # All parameters 'p' defined here are available as 'self.p'.
     parameters = {
-        'noise': [0, 10**-3, 10**-2, 10**-1, 1, 10, 100],
+        'noise': [0, 0.1, 0.2, 0.3, 0.5, 1, 10, 100],
     }
 
     # Force solver to run only once if you don't want to record training steps
