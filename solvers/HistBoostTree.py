@@ -18,7 +18,7 @@ class Solver(OSolver):
     def get_model(self):
         return Pipeline(steps=[("preprocessor", "passthrough"),
                                ("model", HistGradientBoostingClassifier(
-                                   categorical_features="from_dtype"))])
+                                   categorical_features=self.cat_ind))])
 
     def sample_parameters(self, trial):
         max_iter = trial.suggest_int("max_iter", 10, 2000, step=10)

@@ -18,7 +18,7 @@ class Dataset(BaseDataset):
     # Any parameters 'param' defined here is available as `self.param`.
     parameters = {
         'n_samples, n_features': [
-            (100, 5),
+            (10**5, 5),
         ],
     }
 
