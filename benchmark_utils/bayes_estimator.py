@@ -5,6 +5,7 @@ from benchopt import BaseSolver, safe_import_context
 # - getting requirements info when all dependencies are not installed.
 with safe_import_context() as import_ctx:
     import numpy as np
+    from sklearn.metrics import r2_score
 
 
 # The benchmark solvers must be named `Solver` and
@@ -19,26 +20,17 @@ class BayesEstimator(BaseSolver):
     def _model_helper(self, X, noise):
         if self.beta is None:
             self.beta = self.rng.randn(X.shape[1])
-        return X @ self.beta + noise * self.rng.randn(X.shape[0]) > 0
+        return X @ self.beta  # + noise * self.rng.randn(X.shape[0])
 
     def fit(self, X, y):
         pass
 
     def score(self, X, y):
-        return np.mean(self.model(X) == y)
+        y_pred = self.model(X)
+        return r2_score(y, y_pred)
 
     def predict(self, X):
         return self.model(X)
-
-    def predict_proba(self, X):
-        # Compute the probability estimates for each class.
-        # In this case, we can use the sign of the model's output as the
-        # probability estimate.
-        predictions = self.model(X)
-        proba = np.zeros((X.shape[0], 2))
-        proba[:, 0] = (predictions == -1)
-        proba[:, 1] = (predictions == 1)
-        return proba
 
     def set_objective(
             self, X_train, y_train, X_val, y_val,

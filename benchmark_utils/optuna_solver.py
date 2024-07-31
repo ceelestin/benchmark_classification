@@ -7,7 +7,7 @@ from benchopt.stopping_criterion import SufficientProgressCriterion
 with safe_import_context() as import_ctx:
     import optuna
     from sklearn.base import clone
-    from sklearn.dummy import DummyClassifier
+    from sklearn.dummy import DummyRegressor
 
 
 # The benchmark solvers must be named `Solver` and
@@ -55,7 +55,7 @@ class OSolver(BaseSolver):
         # This is the function that is called to evaluate the solver.
         # It runs the algorithm for a given a number of iterations `n_iter`.
         sampler = optuna.samplers.RandomSampler()
-        self.best_model = DummyClassifier().fit(self.X_train, self.y_train)
+        self.best_model = DummyRegressor().fit(self.X_train, self.y_train)
         study = optuna.create_study(direction="maximize", sampler=sampler)
         while callback():
             study.optimize(self.objective, n_trials=10)
