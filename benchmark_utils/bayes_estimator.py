@@ -20,7 +20,7 @@ class BayesEstimator(BaseSolver):
     def _model_helper(self, X, noise):
         if self.beta is None:
             self.beta = self.rng.randn(X.shape[1])
-        return X @ self.beta  # + noise * self.rng.randn(X.shape[0])
+        return X @ self.beta + noise * self.rng.randn(X.shape[0])
 
     def fit(self, X, y):
         pass
