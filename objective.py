@@ -78,9 +78,8 @@ class Objective(BaseObjective):
                 y_train, y_test = y[train_index], y[test_index]
 
         X_train, X_val, y_train, y_val = train_test_split(
-                    X_train, y_train, test_size=0.2,
-                    random_state=rng, stratify=y_train
-                )
+                    X_train, y_train, test_size=0.2, random_state=rng
+                    )
 
         self.X_train, self.y_train = X_train, y_train
         self.X_val, self.y_val = X_val, y_val

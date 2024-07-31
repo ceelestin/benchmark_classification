@@ -34,7 +34,7 @@ class Solver(OSolver):
             ]
         )
         return Pipeline(steps=[("preprocessor", preprocessor),
-                               ("model", SVR(probability=True))])
+                               ("model", SVR())])
 
     def skip(self, X_train, **kwargs):
         if X_train.shape[0] > 5000:
@@ -43,6 +43,7 @@ class Solver(OSolver):
 
     def sample_parameters(self, trial):
         params = {}
+        params['C'] = trial.suggest_float("C", 1e-1, 1e1, log=True)
         params['kernel'] = trial.suggest_categorical(
             "kernel", ["linear", "rbf", "poly"]
         )
