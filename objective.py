@@ -6,9 +6,7 @@ from benchopt import BaseObjective, safe_import_context
 with safe_import_context() as import_ctx:
     import numpy as np
     from sklearn.dummy import DummyRegressor
-    from sklearn.model_selection import (KFold, ShuffleSplit, StratifiedKFold,
-                                         StratifiedShuffleSplit,
-                                         train_test_split)
+    from sklearn.model_selection import KFold, ShuffleSplit, train_test_split
 
 
 # The benchmark objective must be named `Objective` and
@@ -31,8 +29,7 @@ class Objective(BaseObjective):
         'seed': list(range(10)),
         'test_size': [0.20],
         # 'validation_size': [0.9, 0.75, 0.5, 0.25, 0.1, 0.05],
-        'procedure': ['train_test_split', 'KFold', 'StratifiedKFold',
-                      'ShuffleSplit', 'StratifiedShuffleSplit']
+        'procedure': ['train_test_split', 'KFold', 'ShuffleSplit']
     }
 
     # Minimal version of benchopt required to run this benchmark.
@@ -58,22 +55,10 @@ class Objective(BaseObjective):
             for train_index, test_index in kf.split(X):
                 X_train, X_test = X[train_index], X[test_index]
                 y_train, y_test = y[train_index], y[test_index]
-        elif self.procedure == 'StratifiedKFold':
-            skf = StratifiedKFold(n_splits=int(1./self.test_size),
-                                  shuffle=True, random_state=rng)
-            for train_index, test_index in skf.split(X, y):
-                X_train, X_test = X[train_index], X[test_index]
-                y_train, y_test = y[train_index], y[test_index]
         elif self.procedure == 'ShuffleSplit':
             ss = ShuffleSplit(n_splits=10, test_size=self.test_size,
                               random_state=rng)
             for train_index, test_index in ss.split(X):
-                X_train, X_test = X[train_index], X[test_index]
-                y_train, y_test = y[train_index], y[test_index]
-        elif self.procedure == 'StratifiedShuffleSplit':
-            sss = StratifiedShuffleSplit(n_splits=10, test_size=self.test_size,
-                                         random_state=rng)
-            for train_index, test_index in sss.split(X, y):
                 X_train, X_test = X[train_index], X[test_index]
                 y_train, y_test = y[train_index], y[test_index]
 
