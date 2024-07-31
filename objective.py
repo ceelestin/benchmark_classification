@@ -12,7 +12,6 @@ with safe_import_context() as import_ctx:
                                          StratifiedShuffleSplit,
                                          train_test_split)
 
-fej
 # The benchmark objective must be named `Objective` and
 # inherit from `BaseObjective` for `benchopt` to work properly.
 class Objective(BaseObjective):
