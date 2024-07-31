@@ -5,7 +5,7 @@ from benchmark_utils.optuna_solver import OSolver
 with safe_import_context() as import_ctx:
     import optuna  # noqa: F401
     from sklearn.compose import ColumnTransformer
-    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.ensemble import RandomForestRegressor
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import OneHotEncoder as OHE
 
@@ -27,7 +27,7 @@ class Solver(OSolver):
             ]
         )
         return Pipeline(steps=[("preprocessor", preprocessor),
-                               ("model", RandomForestClassifier())])
+                               ("model", RandomForestRegressor())])
 
     def sample_parameters(self, trial):
         n_estimators = trial.suggest_int("n_estimators", 10, 200, step=10)

@@ -4,7 +4,7 @@ from benchmark_utils.optuna_solver import OSolver
 
 with safe_import_context() as import_ctx:
     import optuna  # noqa: F401
-    from xgboost import XGBClassifier
+    from xgboost import XGBRegressor
 
 
 class Solver(OSolver):
@@ -14,7 +14,7 @@ class Solver(OSolver):
     requirements = ['py-xgboost', 'pip:optuna']
 
     def get_model(self):
-        return XGBClassifier()
+        return XGBRegressor()
 
     def sample_parameters(self, trial):
         n_estimators = trial.suggest_int("max_iter", 10, 2000, step=10)

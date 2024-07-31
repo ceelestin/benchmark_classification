@@ -10,7 +10,7 @@ with safe_import_context() as import_ctx:
     from sklearn.compose import ColumnTransformer
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import OneHotEncoder as OHE
-    from sklearn.svm import SVC
+    from sklearn.svm import SVR
 
 
 # The benchmark solvers must be named `Solver` and
@@ -34,16 +34,15 @@ class Solver(OSolver):
             ]
         )
         return Pipeline(steps=[("preprocessor", preprocessor),
-                               ("model", SVC(probability=True))])
+                               ("model", SVR(probability=True))])
 
     def skip(self, X_train, **kwargs):
         if X_train.shape[0] > 5000:
-            return True, "Too large for SVC"
+            return True, "Too large for SVR"
         return False, None
 
     def sample_parameters(self, trial):
         params = {}
-        params['C'] = trial.suggest_float("C", 1e-1, 1e1, log=True)
         params['kernel'] = trial.suggest_categorical(
             "kernel", ["linear", "rbf", "poly"]
         )

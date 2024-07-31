@@ -6,7 +6,7 @@ from benchmark_utils.optuna_solver import OSolver
 with safe_import_context() as import_ctx:
     import optuna  # noqa: F401
     from sklearn.compose import ColumnTransformer
-    from sklearn.dummy import DummyClassifier
+    from sklearn.dummy import DummyRegressor
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import OneHotEncoder as OHE
 
@@ -32,7 +32,7 @@ class Solver(OSolver):
             ]
         )
         return Pipeline(steps=[("preprocessor", preprocessor),
-                               ("model", DummyClassifier())])
+                               ("model", DummyRegressor())])
 
     def sample_parameters(self, trial):
         seed = trial.suggest_int("seed", 0, 2**31)

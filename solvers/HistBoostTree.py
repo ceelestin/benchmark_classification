@@ -4,20 +4,20 @@ from benchmark_utils.optuna_solver import OSolver
 
 with safe_import_context() as import_ctx:
     import optuna  # noqa: F401
-    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.ensemble import HistGradientBoostingRegressor
     from sklearn.pipeline import Pipeline
 
 
 class Solver(OSolver):
 
-    name = 'HistGradientBoostingClassifier'
+    name = 'HistGradientBoosting'
     requirements = ["pip:optuna"]
     extra_model_params = {
     }
 
     def get_model(self):
         return Pipeline(steps=[("preprocessor", "passthrough"),
-                               ("model", HistGradientBoostingClassifier(
+                               ("model", HistGradientBoostingRegressor(
                                    categorical_features=self.cat_ind))])
 
     def sample_parameters(self, trial):
