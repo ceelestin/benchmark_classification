@@ -30,7 +30,7 @@ class Dataset(BaseDataset):
         rng = np.random.RandomState(42)  # same seed as in BayesEstimator utils
         beta = rng.randn(self.n_features)
         X = rng.randn(self.n_samples, self.n_features)
-        y = X @ beta + rng.randn(self.n_samples)
+        y = X @ beta + 0.3 * rng.randn(self.n_samples)
         cat_indicator = [False]*X.shape[1]
 
         # The dictionary defines the keyword arguments for `Objective.set_data`
