@@ -12,30 +12,36 @@ with safe_import_context() as import_ctx:
 
 
 class Solver(OSolver):
-
-    name = 'dummy'
+    name = "dummy"
     requirements = ["pip:optuna"]
 
     stopping_criterion = SufficientProgressCriterion(
-        strategy='callback', patience=200
-    )
+        strategy="callback", patience=200
+        )
 
     def get_model(self):
         size = self.X_train.shape[1]
         preprocessor = ColumnTransformer(
             [
-                ("one_hot", OHE(
-                        categories="auto", handle_unknown="ignore",
-                    ), [i for i in range(size) if self.cat_ind[i]]),
-                ("numerical", "passthrough",
-                 [i for i in range(size) if not self.cat_ind[i]],)
+                (
+                    "one_hot",
+                    OHE(
+                        categories="auto",
+                        handle_unknown="ignore",
+                    ),
+                    [i for i in range(size) if self.cat_ind[i]],
+                ),
+                (
+                    "numerical",
+                    "passthrough",
+                    [i for i in range(size) if not self.cat_ind[i]],
+                ),
             ]
         )
-        return Pipeline(steps=[("preprocessor", preprocessor),
-                               ("model", DummyRegressor())])
+        return Pipeline(
+            steps=[("preprocessor", preprocessor), ("model", DummyRegressor())]
+        )
 
     def sample_parameters(self, trial):
         seed = trial.suggest_int("seed", 0, 2**31)
-        return dict(
-            random_state=seed
-        )
+        return dict(random_state=seed)

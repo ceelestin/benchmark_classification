@@ -8,10 +8,9 @@ with safe_import_context() as import_ctx:
 
 
 class Solver(OSolver):
+    name = "XGBoost"
 
-    name = 'XGBoost'
-
-    requirements = ['py-xgboost', 'pip:optuna']
+    requirements = ["py-xgboost", "pip:optuna"]
 
     def get_model(self):
         return XGBRegressor()
@@ -22,10 +21,10 @@ class Solver(OSolver):
         max_leaves = trial.suggest_int("max_leaf_nodes", 3, 300, log=True)
         min_child_weight = trial.suggest_int(
             "min_samples_leaf", 1, 300, log=True
-        )
+            )
         return dict(
             n_estimators=n_estimators,
             learning_rate=l_rate,
             max_leaves=max_leaves,
-            min_child_weight=min_child_weight
+            min_child_weight=min_child_weight,
         )

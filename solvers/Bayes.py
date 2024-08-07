@@ -14,22 +14,21 @@ with safe_import_context() as import_ctx:
 # The benchmark solvers must be named `Solver` and
 # inherit from `BaseSolver` for `benchopt` to work properly.
 class Solver(BaseSolver):
-
     # Name to select the solver in the CLI and to display the results.
-    name = 'Bayes'
+    name = "Bayes"
     # List of parameters for the solver. The benchmark will consider
     # the cross product for each key in the dictionary.
     # All parameters 'p' defined here are available as 'self.p'.
     parameters = {
-        'noise': [0, 0.1, 0.2, 0.3, 0.5, 1, 10, 100],
+        # 'noise': [0, 0.1, 0.2, 0.3, 0.5, 0.75, 1],
+        "noise": [0.2, 0.3],
     }
 
     # Force solver to run only once if you don't want to record training steps
     sampling_strategy = "run_once"
 
     def set_objective(
-            self, X_train, y_train, X_val, y_val,
-            categorical_indicator
+        self, X_train, y_train, X_val, y_val, categorical_indicator, seed
     ):
         # Define the information received by each solver from the objective.
         # The arguments of this function are the results of the
@@ -39,22 +38,38 @@ class Solver(BaseSolver):
         self.X_train, self.y_train = X_train, y_train
         self.X_val, self.y_val = X_val, y_val
         self.cat_ind = categorical_indicator
+        self.seed = seed
 
         size = self.X_train.shape[1]
         preprocessor = ColumnTransformer(
             [
-                ("one_hot", OHE(
-                        categories="auto", handle_unknown="ignore",
-                    ), [i for i in range(size) if self.cat_ind[i]]),
-                ("numerical", "passthrough",
-                 [i for i in range(size) if not self.cat_ind[i]],)
+                (
+                    "one_hot",
+                    OHE(
+                        categories="auto",
+                        handle_unknown="ignore",
+                    ),
+                    [i for i in range(size) if self.cat_ind[i]],
+                ),
+                (
+                    "numerical",
+                    "passthrough",
+                    [i for i in range(size) if not self.cat_ind[i]],
+                ),
             ]
         )
 
-        self.model = Pipeline(steps=[
-            ("preprocessor", preprocessor),
-            ("model", BayesEstimator(n_features=size, noise=self.noise))
-        ])
+        self.model = Pipeline(
+            steps=[
+                ("preprocessor", preprocessor),
+                (
+                    "model",
+                    BayesEstimator(
+                        n_features=size, noise=self.noise, seed=self.seed
+                        ),
+                ),
+            ]
+        )
 
     def run(self, n_iter):
         # This is the function that is called to fit the model.

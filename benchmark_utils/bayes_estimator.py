@@ -9,9 +9,9 @@ with safe_import_context() as import_ctx:
 
 
 class BayesEstimator(BaseEstimator, RegressorMixin):
-    def __init__(self, n_features, noise, random_state=None):
+    def __init__(self, n_features, noise, seed, random_state=None):
         # The following seed must be the same as in the dataset simbayes.py
-        rng_beta = np.random.RandomState(42)
+        rng_beta = np.random.RandomState(seed)
         self.beta = rng_beta.randn(n_features)
         self.noise = noise
         self.rng = np.random.RandomState(random_state)

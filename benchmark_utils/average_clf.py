@@ -14,6 +14,7 @@ class AverageClassifier:
     ----------
     estimators: list of estimators already fitted
     """
+
     def __init__(self, estimators):
         self.estimators = estimators
 

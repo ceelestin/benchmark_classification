@@ -14,13 +14,9 @@ with safe_import_context() as import_ctx:
 # The benchmark solvers must be named `Solver` and
 # inherit from `BaseSolver` for `benchopt` to work properly.
 class GSSolver(BaseSolver):
-
     stopping_criterion = SingleRunCriterion()
 
-    def set_objective(
-            self, X_train, y_train,
-            categorical_indicator
-    ):
+    def set_objective(self, X_train, y_train, categorical_indicator):
         # Define the information received by each solver from the objective.
         # The arguments of this function are the results of the
         # `Objective.get_objective`. This defines the benchmark's API for
@@ -30,21 +26,23 @@ class GSSolver(BaseSolver):
         self.cat_ind = categorical_indicator
         size = self.X.shape[1]
         preprocessor = ColumnTransformer(
-            [("one_hot", OHE(categories="auto",
-                             handle_unknown="ignore"),
-             [i for i in range(size) if self.cat_ind[i]]),
-             (
-                "numerical",
-                "passthrough",
-                [i for i in range(size) if not self.cat_ind[i]],
-            )]
+            [
+                (
+                    "one_hot",
+                    OHE(categories="auto", handle_unknown="ignore"),
+                    [i for i in range(size) if self.cat_ind[i]],
+                ),
+                (
+                    "numerical",
+                    "passthrough",
+                    [i for i in range(size) if not self.cat_ind[i]],
+                ),
+            ]
         )
 
         gm = self.get_model()
         model = Pipeline(steps=[("preprocessor", preprocessor), ("model", gm)])
-        self.clf = GridSearchCV(
-            model, self.parameter_grid
-        )
+        self.clf = GridSearchCV(model, self.parameter_grid)
 
     def run(self, n_iter):
         # This is the function that is called to evaluate the solver.

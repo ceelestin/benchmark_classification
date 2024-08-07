@@ -16,9 +16,8 @@ with safe_import_context() as import_ctx:
 # The benchmark solvers must be named `Solver` and
 # inherit from `BaseSolver` for `benchopt` to work properly.
 class Solver(OSolver):
-
     # Name to select the solver in the CLI and to display the results.
-    name = 'SVM'
+    name = "SVM"
 
     requirements = ["pip:optuna"]
 
@@ -26,11 +25,19 @@ class Solver(OSolver):
         size = self.X_train.shape[1]
         preprocessor = ColumnTransformer(
             [
-                ("one_hot", OHE(
-                        categories="auto", handle_unknown="ignore",
-                    ), [i for i in range(size) if self.cat_ind[i]]),
-                ("numerical", "passthrough",
-                 [i for i in range(size) if not self.cat_ind[i]],)
+                (
+                    "one_hot",
+                    OHE(
+                        categories="auto",
+                        handle_unknown="ignore",
+                    ),
+                    [i for i in range(size) if self.cat_ind[i]],
+                ),
+                (
+                    "numerical",
+                    "passthrough",
+                    [i for i in range(size) if not self.cat_ind[i]],
+                ),
             ]
         )
         return Pipeline(steps=[("preprocessor", preprocessor),
@@ -43,10 +50,10 @@ class Solver(OSolver):
 
     def sample_parameters(self, trial):
         params = {}
-        params['C'] = trial.suggest_float("C", 1e-1, 1e1, log=True)
-        params['kernel'] = trial.suggest_categorical(
+        params["C"] = trial.suggest_float("C", 1e-1, 1e1, log=True)
+        params["kernel"] = trial.suggest_categorical(
             "kernel", ["linear", "rbf", "poly"]
         )
-        if params['kernel'] == 'rbf' or params['kernel'] == 'poly':
-            params['gamma'] = trial.suggest_float("gamma", 1e-4, 1, log=True)
+        if params["kernel"] == "rbf" or params["kernel"] == "poly":
+            params["gamma"] = trial.suggest_float("gamma", 1e-4, 1, log=True)
         return params

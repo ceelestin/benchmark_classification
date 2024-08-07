@@ -9,16 +9,22 @@ with safe_import_context() as import_ctx:
 
 
 class Solver(OSolver):
-
-    name = 'HistGradientBoosting'
+    name = "HistGradientBoosting"
     requirements = ["pip:optuna"]
-    extra_model_params = {
-    }
+    extra_model_params = {}
 
     def get_model(self):
-        return Pipeline(steps=[("preprocessor", "passthrough"),
-                               ("model", HistGradientBoostingRegressor(
-                                   categorical_features=self.cat_ind))])
+        return Pipeline(
+            steps=[
+                ("preprocessor", "passthrough"),
+                (
+                    "model",
+                    HistGradientBoostingRegressor(
+                        categorical_features=self.cat_ind
+                        ),
+                ),
+            ]
+        )
 
     def sample_parameters(self, trial):
         max_iter = trial.suggest_int("max_iter", 10, 2000, step=10)
@@ -26,10 +32,10 @@ class Solver(OSolver):
         max_leaf_nodes = trial.suggest_int("max_leaf_nodes", 3, 300, log=True)
         min_samples_leaf = trial.suggest_int(
             "min_samples_leaf", 1, 300, log=True
-        )
+            )
         return dict(
             max_iter=max_iter,
             learning_rate=l_rate,
             max_leaf_nodes=max_leaf_nodes,
-            min_samples_leaf=min_samples_leaf
+            min_samples_leaf=min_samples_leaf,
         )
